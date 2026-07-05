@@ -1,0 +1,26 @@
+# ---- .NET build output ----
+bin/
+obj/
+publish/
+*.user
+*.suo
+.vs/
+
+# ---- Runtime data created by the app (not source) ----
+patterns.json
+patterns.duckdb
+settings.json
+ai_profiles.json          # містить (зашифровані) API-ключі — НЕ комітити
+execution.log
+7z.txt
+map_*.csv
+
+# ---- Local backups / scratch ----
+_backup/
+*.bak
+*.tmp
+
+# ---- OS / editor ----
+Thumbs.db
+.DS_Store
+*.swp

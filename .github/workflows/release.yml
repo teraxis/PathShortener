@@ -1,0 +1,52 @@
+name: Release
+
+# Збирає обидва варіанти .exe і публікує їх у GitHub Releases
+# при створенні тегу вигляду v1.9.0.
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Run core tests
+        run: dotnet run --project src/PathShortener.Verify -c Release
+
+      - name: Publish portable (self-contained)
+        run: >
+          dotnet publish gui/PathShortener.Gui.csproj -c Release -r win-x64
+          -p:PublishSingleFile=true -p:SelfContained=true
+          -p:EnableCompressionInSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+          -o publish/portable
+
+      - name: Publish compact (framework-dependent)
+        run: >
+          dotnet publish gui/PathShortener.Gui.csproj -c Release -r win-x64
+          -p:PublishSingleFile=true -p:SelfContained=false
+          -p:IncludeNativeLibrariesForSelfExtract=true
+          -o publish/compact
+
+      - name: Zip artifacts
+        run: |
+          Compress-Archive -Path publish/portable/* -DestinationPath PathShortener-portable.zip
+          Compress-Archive -Path publish/compact/*  -DestinationPath PathShortener-compact.zip
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            PathShortener-portable.zip
+            PathShortener-compact.zip
+          generate_release_notes: true

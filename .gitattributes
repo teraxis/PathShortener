@@ -1,0 +1,18 @@
+# Нормалізація кінців рядків: у репозиторії — LF, на диску — за платформою
+* text=auto
+
+# Явно текстові
+*.cs      text
+*.axaml   text
+*.csproj  text
+*.json    text
+*.md      text
+*.csv     text
+*.yml     text
+*.manifest text
+*.config  text
+
+# Бінарні (не чіпати)
+*.png     binary
+*.exe     binary
+*.zip     binary

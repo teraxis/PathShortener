@@ -1,0 +1,233 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="PathShortener.Gui.MainWindow"
+        Width="1340" Height="840" MinWidth="1000" MinHeight="620">
+
+  <TabControl x:Name="MainTabs" TabStripPlacement="Left" Margin="10">
+
+    <!-- ================= АНАЛІЗ ================= -->
+    <TabItem x:Name="AnalysisTab">
+      <Border Classes="card" Margin="8,0,0,0">
+        <Grid RowDefinitions="Auto,Auto,*,Auto">
+          <StackPanel Grid.Row="0" x:Name="ActionButtons" Orientation="Horizontal" Spacing="8" Margin="0,0,0,12">
+            <Button x:Name="AnalyzeButton" Click="OnAnalyze"/>
+            <Button x:Name="IntelligentButton" Click="OnIntelligentAnalyze"/>
+            <Button x:Name="ApplyButton" Classes="primary" Click="OnApply"/>
+          </StackPanel>
+
+          <TextBlock Grid.Row="1" x:Name="PreviewTitle" Classes="section" Margin="0,0,0,8"/>
+
+          <DataGrid Grid.Row="2" x:Name="PreviewGrid" AutoGenerateColumns="False" IsReadOnly="False"
+                    CanUserResizeColumns="True" GridLinesVisibility="Horizontal"
+                    ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                    CellEditEnded="OnPreviewCellEdited">
+            <DataGrid.Columns>
+              <DataGridTextColumn Binding="{Binding Orig}" Width="380" IsReadOnly="True"/>
+              <DataGridTextColumn Binding="{Binding New}" Width="380"/>
+              <DataGridTextColumn Binding="{Binding Len}" Width="60" IsReadOnly="True"/>
+              <DataGridTextColumn Binding="{Binding Status}" Width="90" IsReadOnly="True"/>
+              <DataGridTextColumn Binding="{Binding Source}" Width="120" IsReadOnly="True"/>
+              <DataGridTextColumn Binding="{Binding Conflict}" Width="150" IsReadOnly="True"/>
+            </DataGrid.Columns>
+          </DataGrid>
+
+          <Grid Grid.Row="3" ColumnDefinitions="*,Auto" Margin="0,10,0,0">
+            <StackPanel Grid.Column="0" Spacing="6" VerticalAlignment="Center">
+              <ProgressBar x:Name="Progress" Height="8" IsVisible="False"/>
+              <TextBlock x:Name="StatusText" Classes="hint"/>
+            </StackPanel>
+            <Button Grid.Column="1" x:Name="StopButton" Click="OnStop" IsVisible="False"
+                    Margin="10,0,0,0" VerticalAlignment="Center"/>
+          </Grid>
+        </Grid>
+      </Border>
+    </TabItem>
+
+    <!-- ================= ПАПКИ ================= -->
+    <TabItem x:Name="FoldersTab">
+      <Border Classes="card" Margin="8,0,0,0">
+        <Grid RowDefinitions="Auto,Auto,*">
+          <TextBlock Grid.Row="0" x:Name="FoldersHint" Classes="hint" Margin="0,0,0,8"/>
+          <StackPanel Grid.Row="1" x:Name="FolderButtons" Orientation="Horizontal" Spacing="6" Margin="0,0,0,8">
+            <Button x:Name="AddFolderBtn" Click="OnAddFolder"/>
+            <Button x:Name="FolderTargetBtn" Click="OnFolderTarget"/>
+            <Button x:Name="RemoveFolderBtn" Click="OnRemoveFolder"/>
+            <Button x:Name="ClearFoldersBtn" Click="OnClearFolders"/>
+          </StackPanel>
+          <DataGrid Grid.Row="2" x:Name="FoldersGrid" AutoGenerateColumns="False" IsReadOnly="False"
+                    GridLinesVisibility="Horizontal" CanUserResizeColumns="True"
+                    ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                    DoubleTapped="OnFolderDoubleTapped">
+            <DataGrid.Columns>
+              <DataGridCheckBoxColumn Binding="{Binding Enabled}" Width="52"/>
+              <DataGridTextColumn Binding="{Binding SourcePath}" Width="820" IsReadOnly="True"/>
+              <DataGridTextColumn Binding="{Binding TargetText}" Width="220" IsReadOnly="True"/>
+            </DataGrid.Columns>
+          </DataGrid>
+        </Grid>
+      </Border>
+    </TabItem>
+
+    <!-- ================= АРХІВИ ================= -->
+    <TabItem x:Name="ArchivesTab">
+      <Border Classes="card" Margin="8,0,0,0">
+        <Grid RowDefinitions="Auto,Auto,*">
+          <TextBlock Grid.Row="0" x:Name="ArchivesHint" Classes="hint" Margin="0,0,0,8"/>
+          <StackPanel Grid.Row="1" x:Name="ArchiveButtons" Orientation="Horizontal" Spacing="6" Margin="0,0,0,8">
+            <Button x:Name="AddArchiveBtn" Click="OnAddArchives"/>
+            <Button x:Name="ArchiveTargetBtn" Click="OnArchiveTarget"/>
+            <Button x:Name="RemoveArchiveBtn" Click="OnRemoveArchive"/>
+            <Button x:Name="ClearArchivesBtn" Click="OnClearArchives"/>
+          </StackPanel>
+          <DataGrid Grid.Row="2" x:Name="ArchivesGrid" AutoGenerateColumns="False" IsReadOnly="False"
+                    GridLinesVisibility="Horizontal" CanUserResizeColumns="True"
+                    ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                    DoubleTapped="OnArchiveDoubleTapped">
+            <DataGrid.Columns>
+              <DataGridCheckBoxColumn Binding="{Binding Enabled}" Width="52"/>
+              <DataGridTextColumn Binding="{Binding SourcePath}" Width="820" IsReadOnly="True"/>
+              <DataGridTextColumn Binding="{Binding TargetText}" Width="220" IsReadOnly="True"/>
+            </DataGrid.Columns>
+          </DataGrid>
+        </Grid>
+      </Border>
+    </TabItem>
+
+    <!-- ================= СЛОВНИК ================= -->
+    <TabItem x:Name="DictionaryTab">
+      <Border Classes="card" Margin="8,0,0,0">
+        <Grid RowDefinitions="Auto,*,Auto">
+          <TextBlock Grid.Row="0" x:Name="DictHint" Classes="hint" Margin="0,0,0,8"/>
+          <DataGrid Grid.Row="1" x:Name="DictGrid" AutoGenerateColumns="False" IsReadOnly="True"
+                    GridLinesVisibility="Horizontal" CanUserResizeColumns="True"
+                    ScrollViewer.HorizontalScrollBarVisibility="Visible">
+            <DataGrid.Columns>
+              <DataGridTextColumn Binding="{Binding Original}" Width="560"/>
+              <DataGridTextColumn Binding="{Binding Short}" Width="240"/>
+              <DataGridTextColumn Binding="{Binding Source}" Width="100"/>
+            </DataGrid.Columns>
+          </DataGrid>
+          <WrapPanel Grid.Row="2" x:Name="DictButtons" Margin="0,8,0,0">
+            <Button x:Name="DictAddBtn" Click="OnDictAdd" Margin="0,0,6,0"/>
+            <Button x:Name="DictEditBtn" Click="OnDictEdit" Margin="0,0,6,0"/>
+            <Button x:Name="DictDeleteBtn" Click="OnDictDelete" Margin="0,0,6,0"/>
+            <Button x:Name="DictApproveBtn" Click="OnDictApprove" Margin="0,0,6,0"/>
+          </WrapPanel>
+        </Grid>
+      </Border>
+    </TabItem>
+
+    <!-- ================= НАЛАШТУВАННЯ ================= -->
+    <TabItem x:Name="SettingsTab">
+      <Border Classes="card" Margin="8,0,0,0">
+        <ScrollViewer>
+          <StackPanel Spacing="16" Margin="0,0,8,0">
+
+            <StackPanel Spacing="8">
+              <TextBlock x:Name="InterfaceTitle" Classes="section"/>
+              <Grid ColumnDefinitions="120,300" RowDefinitions="Auto,Auto">
+                <TextBlock Grid.Row="0" Grid.Column="0" x:Name="ThemeLabel" VerticalAlignment="Center"/>
+                <ComboBox Grid.Row="0" Grid.Column="1" x:Name="ThemeCombo" HorizontalAlignment="Stretch" SelectionChanged="OnThemeChanged"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" x:Name="LanguageLabel" VerticalAlignment="Center" Margin="0,8,0,0"/>
+                <ComboBox Grid.Row="1" Grid.Column="1" x:Name="LanguageCombo" HorizontalAlignment="Stretch" Margin="0,8,0,0" SelectionChanged="OnLanguageChanged"/>
+              </Grid>
+              <Button x:Name="AboutButton" Click="OnAbout" HorizontalAlignment="Left"/>
+            </StackPanel>
+
+            <StackPanel Spacing="8">
+              <TextBlock x:Name="LimitsTitle" Classes="section"/>
+              <Grid ColumnDefinitions="220,140" RowDefinitions="Auto,Auto,Auto">
+                <TextBlock Grid.Row="0" Grid.Column="0" x:Name="PathLimitLabel" VerticalAlignment="Center"/>
+                <NumericUpDown Grid.Row="0" Grid.Column="1" x:Name="Budget" Minimum="100" Maximum="32000" Value="259" Increment="1" FormatString="0" ValueChanged="OnBudgetChanged"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" x:Name="FileLimitLabel" VerticalAlignment="Center" Margin="0,8,0,0"/>
+                <NumericUpDown Grid.Row="1" Grid.Column="1" x:Name="FileLimit" Minimum="0" Maximum="255" Value="0" Increment="1" FormatString="0" Margin="0,8,0,0" ValueChanged="OnBudgetChanged"/>
+                <TextBlock Grid.Row="2" Grid.Column="0" x:Name="FolderLimitLabel" VerticalAlignment="Center" Margin="0,8,0,0"/>
+                <NumericUpDown Grid.Row="2" Grid.Column="1" x:Name="FolderLimit" Minimum="0" Maximum="255" Value="0" Increment="1" FormatString="0" Margin="0,8,0,0" ValueChanged="OnBudgetChanged"/>
+              </Grid>
+            </StackPanel>
+
+            <StackPanel Spacing="6" x:Name="RulesPanel">
+              <TextBlock x:Name="RulesTitle" Classes="section"/>
+              <CheckBox x:Name="RuleDict" IsChecked="True" IsCheckedChanged="OnRuleChanged"/>
+              <CheckBox x:Name="RuleStop" IsChecked="True" IsCheckedChanged="OnRuleChanged"/>
+              <CheckBox x:Name="RuleCollapse" IsChecked="True" IsCheckedChanged="OnRuleChanged"/>
+              <CheckBox x:Name="RuleDedup" IsChecked="True" IsCheckedChanged="OnRuleChanged"/>
+              <CheckBox x:Name="RuleNormDates" IsChecked="True" IsCheckedChanged="OnRuleChanged"/>
+              <CheckBox x:Name="RuleAcronyms" IsChecked="False" IsCheckedChanged="OnRuleChanged"/>
+              <StackPanel Orientation="Horizontal" Spacing="6">
+                <CheckBox x:Name="RuleTruncWords" IsChecked="False" IsCheckedChanged="OnRuleChanged"/>
+                <TextBlock x:Name="WordLenLabel" VerticalAlignment="Center"/>
+                <NumericUpDown x:Name="WordLen" Minimum="2" Maximum="20" Value="5" Increment="1" FormatString="0" Width="110" ValueChanged="OnBudgetChanged"/>
+              </StackPanel>
+            </StackPanel>
+
+            <StackPanel Spacing="8" x:Name="DefaultDestRow">
+              <TextBlock x:Name="DefaultDestTitle" Classes="section"/>
+              <Grid ColumnDefinitions="*,Auto">
+                <TextBox Grid.Column="0" x:Name="DefaultDest" IsReadOnly="True"/>
+                <Button Grid.Column="1" x:Name="ChooseDestBtn" Click="OnChooseDefault" Margin="8,0,0,0"/>
+              </Grid>
+            </StackPanel>
+
+            <StackPanel Spacing="8" x:Name="ProviderPanel">
+              <TextBlock x:Name="ProviderTitle" Classes="section"/>
+              <Grid ColumnDefinitions="Auto,*">
+                <TextBlock Grid.Column="0" x:Name="ProviderLabel" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <ComboBox Grid.Column="1" x:Name="ProviderCombo" HorizontalAlignment="Stretch" SelectionChanged="OnProviderChanged"/>
+              </Grid>
+              <TextBlock x:Name="ProfileListLabel" Classes="hint"/>
+              <ListBox x:Name="ProfilesList" Height="90" SelectionChanged="OnProfileSelected"/>
+              <WrapPanel x:Name="ProfileButtons">
+                <Button x:Name="ProfileAddBtn" Click="OnProfileAdd" Margin="0,0,6,6"/>
+                <Button x:Name="ProfileEditBtn" Click="OnProfileEdit" Margin="0,0,6,6"/>
+                <Button x:Name="ProfileDeleteBtn" Click="OnProfileDelete" Margin="0,0,6,6"/>
+                <Button x:Name="ProfileActiveBtn" Click="OnProfileSetActive" Margin="0,0,6,6"/>
+                <Button x:Name="ProfileTestBtn" Click="OnProfileTest" Margin="0,0,6,6"/>
+              </WrapPanel>
+              <TextBlock x:Name="ProfileStatus" Classes="hint" TextWrapping="Wrap"/>
+            </StackPanel>
+
+            <StackPanel Spacing="8" x:Name="OllamaRow">
+              <TextBlock x:Name="OllamaTitle" Classes="section"/>
+              <Grid ColumnDefinitions="Auto,*">
+                <TextBlock Grid.Column="0" x:Name="ModelLabel" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <ComboBox Grid.Column="1" x:Name="ModelCombo" HorizontalAlignment="Stretch" SelectionChanged="OnModelSelected"/>
+              </Grid>
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <Button x:Name="OllamaActionButton" Click="OnOllamaAction" IsVisible="False"/>
+                <Button x:Name="OllamaRefreshBtn" Content="⟳" Click="OnOllamaRefresh"/>
+              </StackPanel>
+              <TextBlock x:Name="OllamaStatus" Classes="hint" TextWrapping="Wrap"/>
+            </StackPanel>
+
+          </StackPanel>
+        </ScrollViewer>
+      </Border>
+    </TabItem>
+
+    <!-- ================= СТАТИСТИКА ================= -->
+    <TabItem x:Name="StatsTab">
+      <Border Classes="card" Margin="8,0,0,0">
+        <StackPanel Spacing="12">
+          <TextBlock x:Name="StatsTitle" Classes="section"/>
+          <TextBlock x:Name="StatsHint" Classes="hint"/>
+          <Grid ColumnDefinitions="320,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" Margin="0,8,0,0">
+            <TextBlock Grid.Row="0" Grid.Column="0" x:Name="StatSourcesLabel"/>
+            <TextBlock Grid.Row="0" Grid.Column="1" x:Name="StatSourcesValue" FontWeight="SemiBold"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" x:Name="StatPathsLabel" Margin="0,6,0,0"/>
+            <TextBlock Grid.Row="1" Grid.Column="1" x:Name="StatPathsValue" FontWeight="SemiBold" Margin="0,6,0,0"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" x:Name="StatModelLabel" Margin="0,6,0,0"/>
+            <TextBlock Grid.Row="2" Grid.Column="1" x:Name="StatModelValue" FontWeight="SemiBold" Margin="0,6,0,0"/>
+            <TextBlock Grid.Row="3" Grid.Column="0" x:Name="StatCallsLabel" Margin="0,6,0,0"/>
+            <TextBlock Grid.Row="3" Grid.Column="1" x:Name="StatCallsValue" FontWeight="SemiBold" Margin="0,6,0,0"/>
+            <TextBlock Grid.Row="4" Grid.Column="0" x:Name="StatTokensLabel" Margin="0,6,0,0"/>
+            <TextBlock Grid.Row="4" Grid.Column="1" x:Name="StatTokensValue" FontWeight="SemiBold" Margin="0,6,0,0"/>
+            <TextBlock Grid.Row="5" Grid.Column="0" x:Name="StatAcceptedLabel" Margin="0,6,0,0"/>
+            <TextBlock Grid.Row="5" Grid.Column="1" x:Name="StatAcceptedValue" FontWeight="SemiBold" Margin="0,6,0,0"/>
+          </Grid>
+        </StackPanel>
+      </Border>
+    </TabItem>
+
+  </TabControl>
+</Window>

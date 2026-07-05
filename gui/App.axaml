@@ -1,0 +1,153 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="PathShortener.Gui.App"
+             RequestedThemeVariant="Light">
+
+  <!-- Палітри: світла (за замовчуванням) і м'яка графітова темна (не чорна) -->
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+          <SolidColorBrush x:Key="AppWindowBg">#F3F5F9</SolidColorBrush>
+          <SolidColorBrush x:Key="AppCardBg">#FFFFFF</SolidColorBrush>
+          <SolidColorBrush x:Key="AppCardBorder">#E4E7EC</SolidColorBrush>
+          <SolidColorBrush x:Key="AppTextPrimary">#1D2939</SolidColorBrush>
+          <SolidColorBrush x:Key="AppTextHint">#667085</SolidColorBrush>
+          <SolidColorBrush x:Key="AppBtnBg">#FFFFFF</SolidColorBrush>
+          <SolidColorBrush x:Key="AppBtnBorder">#D0D5DD</SolidColorBrush>
+          <SolidColorBrush x:Key="AppBtnFg">#344054</SolidColorBrush>
+          <SolidColorBrush x:Key="AppBtnHoverBg">#F2F4F7</SolidColorBrush>
+          <SolidColorBrush x:Key="AppGridHeaderBg">#F9FAFB</SolidColorBrush>
+          <SolidColorBrush x:Key="AppGridLine">#F2F4F7</SolidColorBrush>
+          <SolidColorBrush x:Key="AppRowOver">#FEE4E2</SolidColorBrush>
+          <SolidColorBrush x:Key="AppRowTrunc">#FEF3C7</SolidColorBrush>
+          <SolidColorBrush x:Key="AppRowHeader">#EEF2F8</SolidColorBrush>
+          <SolidColorBrush x:Key="AppAccent">#3E63DD</SolidColorBrush>
+          <SolidColorBrush x:Key="AppAccentHover">#3556C4</SolidColorBrush>
+          <SolidColorBrush x:Key="AppAccentPressed">#2C48A8</SolidColorBrush>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+          <SolidColorBrush x:Key="AppWindowBg">#1E2126</SolidColorBrush>
+          <SolidColorBrush x:Key="AppCardBg">#282C33</SolidColorBrush>
+          <SolidColorBrush x:Key="AppCardBorder">#3A3F47</SolidColorBrush>
+          <SolidColorBrush x:Key="AppTextPrimary">#E6E8EB</SolidColorBrush>
+          <SolidColorBrush x:Key="AppTextHint">#9BA1AA</SolidColorBrush>
+          <SolidColorBrush x:Key="AppBtnBg">#31353C</SolidColorBrush>
+          <SolidColorBrush x:Key="AppBtnBorder">#4A505A</SolidColorBrush>
+          <SolidColorBrush x:Key="AppBtnFg">#D5D9DE</SolidColorBrush>
+          <SolidColorBrush x:Key="AppBtnHoverBg">#3A4048</SolidColorBrush>
+          <SolidColorBrush x:Key="AppGridHeaderBg">#2E323A</SolidColorBrush>
+          <SolidColorBrush x:Key="AppGridLine">#333842</SolidColorBrush>
+          <SolidColorBrush x:Key="AppRowOver">#53302E</SolidColorBrush>
+          <SolidColorBrush x:Key="AppRowTrunc">#4E4423</SolidColorBrush>
+          <SolidColorBrush x:Key="AppRowHeader">#313640</SolidColorBrush>
+          <SolidColorBrush x:Key="AppAccent">#6B85E8</SolidColorBrush>
+          <SolidColorBrush x:Key="AppAccentHover">#7E95EC</SolidColorBrush>
+          <SolidColorBrush x:Key="AppAccentPressed">#5A73D6</SolidColorBrush>
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </Application.Resources>
+
+  <Application.Styles>
+    <FluentTheme>
+      <FluentTheme.Palettes>
+        <ColorPaletteResources x:Key="Light" Accent="#3E63DD" RegionColor="#F3F5F9" ErrorText="#D92D20" />
+        <ColorPaletteResources x:Key="Dark" Accent="#6B85E8" RegionColor="#1E2126" ErrorText="#F97066" />
+      </FluentTheme.Palettes>
+    </FluentTheme>
+    <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
+
+    <!-- ===== спільні стилі, кольори — з активної палітри ===== -->
+
+    <Style Selector="Window">
+      <Setter Property="Background" Value="{DynamicResource AppWindowBg}" />
+    </Style>
+
+    <Style Selector="Border.card">
+      <Setter Property="Background" Value="{DynamicResource AppCardBg}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource AppCardBorder}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="10" />
+      <Setter Property="Padding" Value="14" />
+      <Setter Property="BoxShadow" Value="0 1 3 0 #14101828" />
+    </Style>
+
+    <Style Selector="TextBlock.section">
+      <Setter Property="FontSize" Value="14" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="Foreground" Value="{DynamicResource AppTextPrimary}" />
+    </Style>
+    <Style Selector="TextBlock.hint">
+      <Setter Property="FontSize" Value="12" />
+      <Setter Property="Foreground" Value="{DynamicResource AppTextHint}" />
+    </Style>
+
+    <Style Selector="Button">
+      <Setter Property="CornerRadius" Value="7" />
+      <Setter Property="Padding" Value="12,7" />
+      <Setter Property="Background" Value="{DynamicResource AppBtnBg}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource AppBtnBorder}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="Foreground" Value="{DynamicResource AppBtnFg}" />
+    </Style>
+    <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource AppBtnHoverBg}" />
+      <Setter Property="Foreground" Value="{DynamicResource AppTextPrimary}" />
+    </Style>
+
+    <Style Selector="Button.primary">
+      <Setter Property="Background" Value="{DynamicResource AppAccent}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource AppAccent}" />
+      <Setter Property="Foreground" Value="White" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+    <Style Selector="Button.primary:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource AppAccentHover}" />
+      <Setter Property="Foreground" Value="White" />
+    </Style>
+    <Style Selector="Button.primary:pressed /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource AppAccentPressed}" />
+      <Setter Property="Foreground" Value="White" />
+    </Style>
+
+    <Style Selector="DataGrid">
+      <Setter Property="Background" Value="{DynamicResource AppCardBg}" />
+      <Setter Property="BorderBrush" Value="{DynamicResource AppCardBorder}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="8" />
+      <Setter Property="FontSize" Value="13" />
+      <Setter Property="RowBackground" Value="{DynamicResource AppCardBg}" />
+      <Setter Property="HorizontalGridLinesBrush" Value="{DynamicResource AppGridLine}" />
+    </Style>
+    <Style Selector="DataGridColumnHeader">
+      <Setter Property="Background" Value="{DynamicResource AppGridHeaderBg}" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+      <Setter Property="FontSize" Value="12" />
+      <Setter Property="Foreground" Value="{DynamicResource AppTextHint}" />
+    </Style>
+
+    <Style Selector="TextBox">
+      <Setter Property="CornerRadius" Value="7" />
+      <Setter Property="BorderBrush" Value="{DynamicResource AppBtnBorder}" />
+    </Style>
+    <Style Selector="ComboBox">
+      <Setter Property="CornerRadius" Value="7" />
+      <Setter Property="BorderBrush" Value="{DynamicResource AppBtnBorder}" />
+    </Style>
+    <Style Selector="NumericUpDown">
+      <Setter Property="CornerRadius" Value="7" />
+    </Style>
+
+    <Style Selector="ProgressBar">
+      <Setter Property="Foreground" Value="{DynamicResource AppAccent}" />
+      <Setter Property="Background" Value="{DynamicResource AppGridLine}" />
+      <Setter Property="CornerRadius" Value="7" />
+    </Style>
+
+    <Style Selector="TabItem">
+      <Setter Property="FontSize" Value="14" />
+      <Setter Property="Padding" Value="10,6" />
+    </Style>
+  </Application.Styles>
+</Application>

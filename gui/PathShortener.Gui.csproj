@@ -1,0 +1,44 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <!-- Дозволяємо довгі шляхи на рівні застосунку -->
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- Ім'я файлу — лише латиниця: кирилиця в іменах ламається при копіюванні без UTF-8 -->
+    <AssemblyName>PathShortener</AssemblyName>
+    <Version>1.9.1</Version>
+    <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
+    <!-- Без .pdb у Release-дистрибутиві -->
+    <DebugType Condition="'$(Configuration)' == 'Release'">none</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\src\PathShortener.Core\PathShortener.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Еталонний словник кладеться поряд із .exe -->
+    <None Include="..\seed_dictionary.csv" Link="seed_dictionary.csv" CopyToOutputDirectory="PreserveNewest" />
+    <!-- Ресурси локалізації вбудовуються в застосунок -->
+    <AvaloniaResource Include="Resources\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.3.*" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.*" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.*" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.*" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.*" />
+  </ItemGroup>
+
+  <!-- Публікація:
+       компактна, потрібен .NET 8 Runtime на машині:
+         dotnet publish gui/PathShortener.Gui.csproj -c Release -r win-x64 -p:PublishSingleFile=true -p:SelfContained=false -p:IncludeNativeLibrariesForSelfExtract=true -o publish/compact
+       самодостатня, працює без .NET (зі стисненням):
+         dotnet publish gui/PathShortener.Gui.csproj -c Release -r win-x64 -p:PublishSingleFile=true -p:SelfContained=true -p:EnableCompressionInSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o publish/portable -->
+
+</Project>
